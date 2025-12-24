@@ -1,0 +1,88 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 120px 2fr 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.header div {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 120px 2fr 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.body > * {
+  text-align: center;
+}
+
+.image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.buttons > * {
+  width: 32px;
+  height: 32px;
+  background-color: #2d8659;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.buttons > *:hover {
+  background-color: #246548;
+}
+
+.buttons > *:last-child {
+  background-color: #ef4444;
+}
+
+.buttons > *:last-child:hover {
+  background-color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .header,
+  .body {
+    grid-template-columns: 80px 1fr;
+    gap: 0.5rem;
+  }
+  
+  .header div:nth-child(n+3),
+  .body > *:nth-child(n+3) {
+    display: none;
+  }
+}

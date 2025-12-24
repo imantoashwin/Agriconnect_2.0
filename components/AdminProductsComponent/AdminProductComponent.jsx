@@ -25,26 +25,34 @@ function AdminProductComponent() {
   const [currentUser, setCurrentUser] = useState(null);
   const [farmerName, setFarmerName] = useState("");
   const [ownerProducts, setOwnerProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getProducts = async () => {
     if (!currentUser) {
       console.log("No current user found");
+      setLoading(false);
       return;
     }
     
     try {
+      setLoading(true);
       const querySnapshot = await getDocs(collection(db, "products"));
       const filteredData = [];
       
       querySnapshot.forEach((docSnap) => {
         const product = docSnap.data();
-        if (product.farmerId === currentUser.uid) {
+        const stock = parseFloat(
+          product.productStock ?? product.stock ?? product.quantity ?? 0
+        );
+
+        if (product.farmerId === currentUser.uid && stock > 0) {
           // Map Firebase data to match your existing structure
           filteredData.push({
             id: product.productId,
             name: product.productName,
             image: product.image,
-            productOwnerName: product.farmerName
+            productOwnerName: product.farmerName,
+            stock,
           });
         }
       });
@@ -52,6 +60,8 @@ function AdminProductComponent() {
       setOwnerProducts(filteredData);
     } catch (error) {
       console.error("Error loading products:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,6 +69,7 @@ function AdminProductComponent() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
         console.log("No user found, should redirect to login");
+        setLoading(false);
         return;
       }
       
@@ -85,35 +96,35 @@ function AdminProductComponent() {
   }, [currentUser]);
 
   return (
-    <div>
-      <div>
-        <div className="w-full h-full flex ">
-          <div className="w-full relative max-w-7xl h-96 items-center  ">
-            <div className="w-full h-full flex justify-evenly space-y-4 flex-wrap ">
-              {ownerProducts.length > 0 ? (
-                ownerProducts?.map((product, index) => (
-                  <Link
-                    key={index}
-                    href={`/dashboard/admin/product/${product.id}`}
-                    passHref
-                  >
-                    <a>
-                      <AdminProductCard
-                        key={index}
-                        productName={product.name}
-                        productImg={product.image}
-                      />
-                    </a>
-                  </Link>
-                ))
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center mt-8">
-                  <p className="text-gray-500 text-lg">No products found</p>
-                </div>
-              )}
-            </div>
+    <div className="w-full h-full px-8">
+      {loading && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-xl shadow-lg flex items-center gap-3">
+            <div className="w-8 h-8 border-4 border-gray-200 border-t-[#2d8659] rounded-full animate-spin"></div>
+            <p className="font-poppins text-gray-700">Loading...</p>
           </div>
         </div>
+      )}
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-6">Your Products</h1>
+
+        {ownerProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {ownerProducts.map((product, index) => (
+              <Link key={index} href={`/dashboard/admin/product/${product.id}`}>
+                <AdminProductCard
+                  key={index}
+                  productName={product.name}
+                  productImg={product.image}
+                />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white border border-gray-200 rounded-lg p-10 text-center">
+            <p className="text-gray-600">No products found</p>
+          </div>
+        )}
       </div>
     </div>
   );

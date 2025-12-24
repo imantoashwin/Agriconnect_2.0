@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BsBagCheckFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { runFireworks } from "../lib/utils";
+import Navbar from "../components/Navbar/Navbar";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -189,8 +190,10 @@ const Success = () => {
   };
 
   return (
-    <div className="w-[100vw] h-[100vh] flex flex-col items-center justify-center">
-      <div className="flex flex-col items-center justify-center w-[80%] h-[50%] bg-[#DCDCDC] rounded-lg">
+    <>
+      <Navbar />
+      <div className="w-[100vw] h-[100vh] flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center w-[80%] h-[50%] bg-[#DCDCDC] rounded-lg">
         <p className="text-green-600 text-[40px]">
           <BsBagCheckFill />
         </p>
@@ -201,7 +204,7 @@ const Success = () => {
               Processing your order...
             </h2>
             <div className="flex items-center justify-center mt-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+              <div className="w-8 h-8 border-4 border-gray-200 border-t-[#2d8659] rounded-full animate-spin"></div>
             </div>
           </>
         ) : (
@@ -223,7 +226,7 @@ const Success = () => {
         </p>
 
         <div className="flex gap-4 mt-[40px]">
-          <Link href="/orders" passHref>
+          <Link href="/orders">
             <button
               type="button"
               className="py-[10px] px-[12px] rounded-3xl uppercase border-none text-[16px] cursor-pointer bg-[#6366f1] hover:scale-105 transition duration-150 ease-out hover:ease-in text-white"
@@ -232,7 +235,7 @@ const Success = () => {
             </button>
           </Link>
           
-          <Link href="/products" passHref>
+          <Link href="/products">
             <button
               type="button"
               className="py-[10px] px-[12px] rounded-3xl uppercase border-none text-[16px] cursor-pointer bg-[#21E591] hover:scale-105 transition duration-150 ease-out hover:ease-in text-white"
@@ -243,7 +246,8 @@ const Success = () => {
         </div>
       </div>
       <ToastContainer />
-    </div>
+      </div>
+    </>
   );
 };
 

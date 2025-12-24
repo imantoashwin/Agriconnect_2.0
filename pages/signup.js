@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Navbar from "../components/Navbar/Navbar";
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
@@ -159,6 +160,7 @@ function Signup() {
 
   return (
     <>
+      <Navbar />
       <div className="min-h-screen bg-gray-50">
         {/* Google Translate Elements */}
         <div className="translate-micro" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 9999, display: 'none' }}>
@@ -172,7 +174,7 @@ function Signup() {
 
         {/* Logo */}
         <div className="px-8 py-6">
-          <Link href="/" passHref>
+          <Link href="/">
             <div className="cursor-pointer">
               <Image
                 src="/Images/Logo/Agriconnect_logo.png"

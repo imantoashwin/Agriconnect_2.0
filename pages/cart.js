@@ -553,7 +553,7 @@ function Cart() {
           <div className="text-center py-20">
             <h1 className="text-3xl font-semibold text-gray-900 mb-4 font-poppins">Your Cart is Empty!</h1>
             <p className="text-gray-600 mb-8 font-poppins">Start adding products to your cart</p>
-            <Link href="/products" passHref>
+            <Link href="/products">
               <button className="px-6 py-3 bg-[#2d8659] text-white rounded-md hover:bg-[#246548] transition-colors font-poppins">
                 Browse Products
               </button>
@@ -647,7 +647,7 @@ function Cart() {
                 <div className="text-center">
                   <p className="text-lg text-gray-700 font-poppins">
                     Please{" "}
-                    <Link href="/signin" passHref>
+                    <Link href="/signin">
                       <span className="text-[#2d8659] hover:underline font-medium">
                         Login
                       </span>

@@ -54,11 +54,16 @@ const InduvialPost = (props) => {
       return;
     }
 
+    // Get user info from localStorage
+    const currentUser = localStorage.getItem("currentUser");
+    const userName = currentUser ? JSON.parse(currentUser).user_name : "Anonymous";
+
     setSubmitting(true);
     try {
       await addDoc(collection(db, "reviews"), {
         productId,
         productName: name,
+        userName: userName,
         rating: stars,
         feedback,
         createdAt: Timestamp.now(),

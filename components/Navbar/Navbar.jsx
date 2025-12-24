@@ -226,9 +226,9 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="flex items-center justify-between px-4 sm:px-6 py-3 bg-white border-b border-gray-100">
+      <nav className="flex items-center justify-between px-6 sm:px-8 py-4 bg-white">
         {/* Logo */}
-        <Link href="/" passHref>
+        <Link href="/">
           <div className="cursor-pointer flex-shrink-0">
             <Image
               src="/Images/Logo/Agriconnect_logo.png"
@@ -241,16 +241,16 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden lg:flex items-center justify-center gap-6 font-poppins text-[14px] text-gray-700 flex-1 mx-8">
+        <div className="hidden lg:flex items-center justify-center gap-8 font-poppins text-[13px] text-gray-600 flex-1 mx-8">
           <Link href="/">
-            <div className={`hover:text-[#2d8659] transition-colors cursor-pointer ${router.pathname === "/" ? "text-[#2d8659] font-semibold" : ""}`}>
+            <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/" ? "text-gray-900" : ""}`}>
               Home
             </div>
           </Link>
 
           {user && (
             <Link href="/products">
-              <div className={`hover:text-[#2d8659] transition-colors cursor-pointer ${router.pathname === "/products" ? "text-[#2d8659] font-semibold" : ""}`}>
+              <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/products" ? "text-gray-900" : ""}`}>
                 Products
               </div>
             </Link>
@@ -258,24 +258,24 @@ const Navbar = () => {
 
           {user && (
             <Link href="/orders">
-              <div className={`hover:text-[#2d8659] transition-colors cursor-pointer ${router.pathname === "/orders" ? "text-[#2d8659] font-semibold" : ""}`}>
+              <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/orders" ? "text-gray-900" : ""}`}>
                 Orders
               </div>
             </Link>
           )}
 
           <Link href="/about">
-            <div className={`hover:text-[#2d8659] transition-colors cursor-pointer ${router.pathname === "/about" ? "text-[#2d8659] font-semibold" : ""}`}>
+            <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/about" ? "text-gray-900" : ""}`}>
               About
             </div>
           </Link>
 
           {user && (
-            <Link href="/cart" passHref>
-              <div className={`cursor-pointer font-poppins text-[14px] hover:text-[#2d8659] transition-colors ${router.pathname === "/cart" ? "text-[#2d8659] font-semibold" : ""}`}>
-                <p className="flex items-center gap-1">
+            <Link href="/cart">
+              <div className={`cursor-pointer font-poppins text-[13px] hover:text-gray-900 transition-colors ${router.pathname === "/cart" ? "text-gray-900" : ""}`}>
+                <p className="flex items-center gap-1.5">
                   <span>Cart</span>
-                  <span className="bg-[#2d8659] text-white text-xs px-2 py-0.5 rounded-full">{getItemsCount()}</span>
+                  <span className="bg-gray-900 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center">{getItemsCount()}</span>
                 </p>
               </div>
             </Link>
@@ -293,9 +293,9 @@ const Navbar = () => {
           {/* Desktop User Menu */}
           {user && (
             <div className="hidden lg:flex items-center gap-4">
-              <p className="font-poppins text-[15px] text-gray-700">{user.user_name}</p>
+              <p className="font-poppins text-[13px] text-gray-600">{user.user_name}</p>
               <button
-                className="px-4 py-2 text-sm font-poppins text-gray-700 hover:text-[#2d8659] transition-colors"
+                className="px-4 py-1.5 text-[13px] font-poppins text-gray-600 hover:text-gray-900 transition-colors"
                 onClick={() => onSignOut()}
               >
                 Sign Out
@@ -303,9 +303,9 @@ const Navbar = () => {
             </div>
           )}
 
-          {!user && (
-            <Link href="/signin" passHref>
-              <button className="hidden lg:inline-block px-4 py-2 text-sm font-poppins text-gray-700 hover:text-[#2d8659] transition-colors border border-gray-200 rounded-lg">
+          {!user && router.pathname !== "/signin" && router.pathname !== "/signup" && (
+            <Link href="/signin">
+              <button className="hidden lg:inline-block px-4 py-1.5 text-[13px] font-poppins text-gray-600 hover:text-gray-900 transition-colors">
                 Sign In
               </button>
             </Link>
@@ -344,13 +344,13 @@ const Navbar = () => {
 
       {/* Mobile Navigation Dropdown */}
       {isOpen && (
-        <div className="fixed top-[70px] left-0 right-0 bg-white shadow-lg z-40 lg:hidden">
-          <div className="flex flex-col py-4">
+        <div className="fixed top-[64px] left-0 right-0 bg-white border-t border-gray-100 z-40 lg:hidden">
+          <div className="flex flex-col py-2">
             <Link href="/">
               <div 
                 onClick={() => setIsOpen(false)}
-                className={`px-6 py-3 font-poppins text-gray-700 hover:bg-gray-50 hover:text-[#2d8659] transition-colors cursor-pointer border-b border-gray-100 ${
-                  router.pathname === "/" ? "text-[#2d8659] bg-gray-50" : ""
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/" ? "text-gray-900" : ""
                 }`}
               >
                 Home
@@ -361,8 +361,8 @@ const Navbar = () => {
               <Link href="/products">
                 <div 
                   onClick={() => setIsOpen(false)}
-                  className={`px-6 py-3 font-poppins text-gray-700 hover:bg-gray-50 hover:text-[#2d8659] transition-colors cursor-pointer border-b border-gray-100 ${
-                    router.pathname === "/products" ? "text-[#2d8659] bg-gray-50" : ""
+                  className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                    router.pathname === "/products" ? "text-gray-900" : ""
                   }`}
                 >
                   Products
@@ -374,8 +374,8 @@ const Navbar = () => {
               <Link href="/orders">
                 <div 
                   onClick={() => setIsOpen(false)}
-                  className={`px-6 py-3 font-poppins text-gray-700 hover:bg-gray-50 hover:text-[#2d8659] transition-colors cursor-pointer border-b border-gray-100 ${
-                    router.pathname === "/orders" ? "text-[#2d8659] bg-gray-50" : ""
+                  className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                    router.pathname === "/orders" ? "text-gray-900" : ""
                   }`}
                 >
                   Orders
@@ -386,8 +386,8 @@ const Navbar = () => {
             <Link href="/about">
               <div 
                 onClick={() => setIsOpen(false)}
-                className={`px-6 py-3 font-poppins text-gray-700 hover:bg-gray-50 hover:text-[#2d8659] transition-colors cursor-pointer border-b border-gray-100 ${
-                  router.pathname === "/about" ? "text-[#2d8659] bg-gray-50" : ""
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/about" ? "text-gray-900" : ""
                 }`}
               >
                 About
@@ -398,8 +398,8 @@ const Navbar = () => {
               <Link href="/cart">
                 <div 
                   onClick={() => setIsOpen(false)}
-                  className={`px-6 py-3 font-poppins text-gray-700 hover:bg-gray-50 hover:text-[#2d8659] transition-colors cursor-pointer border-b border-gray-100 ${
-                    router.pathname === "/cart" ? "text-[#2d8659] bg-gray-50" : ""
+                  className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                    router.pathname === "/cart" ? "text-gray-900" : ""
                   }`}
                 >
                   Cart ({getItemsCount()})
@@ -408,28 +408,30 @@ const Navbar = () => {
             )}
 
             {user ? (
-              <div className="px-6 py-3 border-t border-gray-200">
-                <p className="text-sm text-gray-600 mb-2">Signed in as</p>
-                <p className="font-semibold text-gray-900 mb-3">{user.user_name}</p>
+              <div className="px-6 py-4 mt-2">
+                <p className="text-[12px] text-gray-500 mb-1">Signed in as</p>
+                <p className="text-[13px] text-gray-900 mb-3">{user.user_name}</p>
                 <button
                   onClick={() => {
                     onSignOut();
                     setIsOpen(false);
                   }}
-                  className="w-full px-4 py-2 text-sm font-poppins text-white bg-[#2d8659] hover:bg-[#246d48] rounded-lg transition-colors"
+                  className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
                 >
                   Sign Out
                 </button>
               </div>
             ) : (
-              <Link href="/signin">
-                <button 
-                  onClick={() => setIsOpen(false)}
-                  className="mx-6 mt-4 w-[calc(100%-48px)] px-4 py-2 text-sm font-poppins text-white bg-[#2d8659] hover:bg-[#246d48] rounded-lg transition-colors"
-                >
-                  Sign In
-                </button>
-              </Link>
+              router.pathname !== "/signin" && router.pathname !== "/signup" && (
+                <Link href="/signin">
+                  <button 
+                    onClick={() => setIsOpen(false)}
+                    className="mx-6 mt-4 mb-2 w-[calc(100%-48px)] px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )
             )}
           </div>
         </div>

@@ -289,7 +289,7 @@ function ProductCard({
       </div>
       <div className="p-4">
         <div className="mb-3">
-          <Link href={`/product/${pids}`} passHref>
+          <Link href={`/product/${pids}`}>
             <h3 className="font-semibold text-lg text-gray-900 cursor-pointer hover:text-[#2d8659] transition-colors mb-1">
               {productName}
             </h3>

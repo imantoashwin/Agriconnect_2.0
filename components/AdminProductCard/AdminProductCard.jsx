@@ -1,34 +1,20 @@
-import Image from "next/image";
 import React from "react";
 
 function AdminProductCard({ productName, productImg }) {
   return (
-    <div className="p-10 cursor-pointer hover:scale-105 duration-100">
-      {" "}
-      <div className="w-80 bg-white border items-center border-gray-200 rounded-lg shadow-md dark:bg-slate-800 dark:border-gray-700">
-        <div className="w-80 h-[250px]">
-          <img
-            className="rounded-lg w-full h-full p-2"
-            src={productImg}
-            alt="product-image"
-          />
-        </div>
-        <div className="p-5">
-          <a href="#">
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {productName}
-            </h5>
-          </a>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            These Products are Directly from Farm. To Home
-          </p>
-          <a
-            href="#"
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-[#20E58F] rounded-lg hover:bg-[#20E58F]/80  focus:outline-none"
-          >
-            Sales Report{" "}
-          </a>
-        </div>
+    <div className="w-full max-w-[280px] bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer">
+      <div className="w-full h-[180px] bg-gray-50 flex items-center justify-center">
+        <img
+          className="max-h-full max-w-full object-contain"
+          src={productImg}
+          alt={productName || "Product image"}
+        />
+      </div>
+      <div className="p-4">
+        <h3 className="text-base font-medium text-gray-900 truncate hover:text-[#2d8659] transition-colors">
+          {productName}
+        </h3>
+        <p className="mt-1 text-xs text-gray-500">Tap to view details</p>
       </div>
     </div>
   );

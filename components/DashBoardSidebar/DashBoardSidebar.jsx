@@ -24,18 +24,18 @@ function DashBoardSidebar({ children }) {
   const { admin } = useSelector((state) => state.admin);
   return (
     <div className="flex">
-      <div>
-        <button className=" inline-flex items-center peer justify-center rounded-md p-2 text-gray-800 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white group">
+      <div className="top-[65px] left-0 h-[calc(100vh-65px)] z-40">
+        <button className="inline-flex items-center peer justify-center rounded-md p-2 text-gray-800 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white group">
           <GiHamburgerMenu
             className="block md:hidden h-6 w-6"
             aria-hidden="true"
           />
         </button>
-        <div className=" h-screen bg-white z-20  lg:left-0 lg:w-60  peer-focus:left-0 peer:transition ease-out delay-150 duration-200">
+        <div className="h-full bg-white overflow-y-auto hidden md:block md:w-60 peer-focus:left-0 peer:transition ease-out delay-150 duration-200 border-r border-gray-100">
           <div className="flex flex-col justify-start item-center">
-            <h1 className="text-base text-center cursor-pointer font-bold text-blue-900 border-b border-gray-100 pb-4 w-full">
+            {/* <h1 className="text-base text-center cursor-pointer font-bold text-blue-900 border-b border-gray-100 pb-4 w-full">
               Dashboard
-            </h1>
+            </h1> */}
             <div className=" my-4 border-b border-gray-100 pb-4">
               <div
                 className={`flex mb-2 justify-start items-center gap-4 ${
@@ -159,7 +159,7 @@ function DashBoardSidebar({ children }) {
                   <Link href="/dashboard/addproduct">Add Product</Link>
                 </h3>
               </div>
-              <div
+              {/* <div
                 className={`flex  mb-2 justify-start items-center gap-4 pl-5 ${
                   router.asPath === "/dashboard/admin/users"
                     ? "bg-gray-900 "
@@ -182,7 +182,7 @@ function DashBoardSidebar({ children }) {
                 >
                   <Link href="/dashboard/admin/users">Users</Link>
                 </h3>
-              </div>
+              </div> */}
             </div>
             {/* setting  */}
             <div className=" my-4 border-b border-gray-100 pb-4">
@@ -200,18 +200,18 @@ function DashBoardSidebar({ children }) {
               </div>
             </div>
             {/* logout */}
-            <div className=" my-4" onClick={onSignOut}>
+            {/* <div className=" my-4" onClick={onSignOut}>
               <div className="flex mb-2 justify-start items-center gap-4 pl-5 border border-gray-200  hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
                 <MdOutlineLogout className="text-2xl text-gray-600 group-hover:text-white " />
                 <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
                   Logout
                 </h3>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-      <div className="w-full">{children}</div>
+      <div className="w-full pt-[65px]">{children}</div>
     </div>
   );
 }

@@ -151,120 +151,111 @@ const EditProductPage = ({ product }) => {
       <DashBoardNavBar />
       <div>
         <DashBoardSidebar>
-          <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4 font-poppins">
-              Edit Product
-            </h1>
-            <div onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Name:
-                </label>
+          <div className="w-full max-w-3xl mx-auto px-6">
+            <h1 className="text-2xl font-semibold text-gray-900 mb-6">Edit Product</h1>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name (readonly) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={editedProduct.name}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-not-allowed"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none cursor-not-allowed bg-gray-50"
                   disabled
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Image:
-                </label>
-                <img
-                  name="image"
-                  src={editedProduct.image}
-                  className="w-[150px] h-[150px] px-3 py-2 border border-gray-300 rounded-md"
-                  alt="product-img"
-                />
+
+              {/* Image preview */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+                <div className="w-[180px] h-[180px] bg-gray-50 border border-gray-200 rounded flex items-center justify-center overflow-hidden">
+                  <img
+                    name="image"
+                    src={editedProduct.image}
+                    className="max-w-full max-h-full object-contain"
+                    alt="product"
+                  />
+                </div>
               </div>
 
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat ">
-                  Category:
-                </label>
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <input
                   type="text"
                   name="category"
                   value={editedProduct.category}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Description:
-                </label>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                 <textarea
                   name="description"
                   value={editedProduct.description}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Price (in ₹-):
-                </label>
+
+              {/* Price */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
                 <input
                   type="number"
                   name="price"
                   value={editedProduct.price}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Stock (in {editedProduct.weight}):
-                </label>
+
+              {/* Quantity */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Stock ({editedProduct.weight})</label>
                 <input
                   type="number"
                   name="quantity"
                   value={editedProduct.quantity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Weight (in Unit):
-                </label>
+
+              {/* Weight */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Unit of Measurement</label>
                 <input
                   type="text"
                   name="weight"
                   value={editedProduct.weight}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Location (in Km):
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={editedProduct.location}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
+              {/* Actions */}
+              <div className="flex items-center gap-4 pt-2">
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="px-4 py-2 bg-gray-900 hover:bg-gray-700 text-white font-medium rounded"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded"
+                  onClick={(e) => onDeleteProduct(e, currentUser?.uid, editedProduct.productId)}
+                >
+                  Delete
+                </button>
               </div>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="px-2 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md"
-              >
-                Save
-              </button>
-              <button
-                className="px-2 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-md  mx-10"
-                onClick={(e) => onDeleteProduct(e, currentUser?.uid, editedProduct.productId)}
-              >
-                Delete
-              </button>
-            </div>
+            </form>
           </div>
           <ToastContainer />
         </DashBoardSidebar>

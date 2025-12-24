@@ -278,11 +278,11 @@ function ProductCard({
       className="w-full max-w-[280px] bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300 sm_max:mb-8"
       key={pids}
     >
-      <div className="w-full h-[200px] relative overflow-hidden bg-gray-50">
+      <div className="w-full h-[200px] relative overflow-hidden bg-gray-50 flex items-center justify-center">
         <Image
           src={imageUrl}
           alt={productName}
-          className="object-cover"
+          className="object-contain"
           fill
           sizes="(max-width: 768px) 100vw, 280px"
         />

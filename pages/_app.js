@@ -1,9 +1,44 @@
 import { Provider } from "react-redux";
+import { useEffect } from "react";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "../store";
 import "../styles/globals.css";
 import Head from "next/head";
 function MyApp({ Component, pageProps, auth }) {
+  // Globally suppress Google Translate banner/balloon and body offset
+  useEffect(() => {
+    const hideTranslateArtifacts = () => {
+      try {
+        const banner = document.querySelector(".goog-te-banner-frame");
+        if (banner) banner.style.display = "none";
+        const banner2 = document.querySelector("iframe.goog-te-banner-frame");
+        if (banner2) banner2.style.display = "none";
+        const balloon = document.querySelector("#goog-gt-tt");
+        if (balloon) balloon.style.display = "none";
+        const balloonFrame = document.querySelector(".goog-te-balloon-frame");
+        if (balloonFrame) balloonFrame.style.display = "none";
+        document.body.style.top = "0px";
+      } catch {}
+    };
+
+    hideTranslateArtifacts();
+    const observer = new MutationObserver(() => hideTranslateArtifacts());
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+    window.addEventListener("hashchange", hideTranslateArtifacts);
+    window.addEventListener("resize", hideTranslateArtifacts);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("hashchange", hideTranslateArtifacts);
+      window.removeEventListener("resize", hideTranslateArtifacts);
+    };
+  }, []);
+
   return (
     <Provider store={store}>
       <Head>

@@ -13,6 +13,22 @@ function DashBoardNavBar() {
 
   const genericHamburgerLine = `h-0.5 w-5 my-0.5 rounded-full bg-gray-700 transition ease transform duration-300`;
   const [isOpen, setIsOpen] = useState(false);
+  // Hide sidebar when mobile menu is open
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const cls = "dashboard-menu-open";
+      if (isOpen) {
+        document.body.classList.add(cls);
+      } else {
+        document.body.classList.remove(cls);
+      }
+    }
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("dashboard-menu-open");
+      }
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const currAdmin = localStorage.getItem("admin");
@@ -270,11 +286,11 @@ function DashBoardNavBar() {
           )}
 
           {/* Mobile Translate Icon */}
-          <div className="mobile-nav-translate-btn-dashboard lg:hidden mr-2" title="Translate">🌐</div>
+          <div className="mobile-nav-translate-btn-dashboard md:hidden mr-2" title="Translate">🌐</div>
 
           {/* Mobile Hamburger Menu */}
           <button
-            className="flex lg:hidden flex-col h-8 w-8 justify-center cursor-pointer items-center group"
+            className="flex md:hidden flex-col h-8 w-8 justify-center cursor-pointer items-center group"
             onClick={() => setIsOpen(!isOpen)}
           >
             <div
@@ -457,65 +473,172 @@ function DashBoardNavBar() {
 const MobileNavLine = ({ admin, onSignOut, setIsOpen }) => {
   const router = useRouter();
 
+  const isDashboard = router.pathname.startsWith("/dashboard");
+
   return (
     <div className="fixed top-[64px] left-0 right-0 bg-white border-t border-gray-100 z-40 lg:hidden">
       <div className="flex flex-col py-2">
-        <Link href="/">
-          <div 
-            onClick={() => setIsOpen(false)}
-            className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
-              router.pathname === "/" ? "text-gray-900" : ""
-            }`}
-          >
-            Home
-          </div>
-        </Link>
+        {isDashboard ? (
+          <>
+            <Link href={admin?.id ? `/dashboard/admin/profile/${admin.id}` : "/dashboard/profile"}>
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === (admin?.id ? `/dashboard/admin/profile/${admin.id}` : "/dashboard/profile")
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Dashboard
+              </div>
+            </Link>
 
-        <Link href="/products">
-          <div 
-            onClick={() => setIsOpen(false)}
-            className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
-              router.pathname === "/products" ? "text-gray-900" : ""
-            }`}
-          >
-            Products
-          </div>
-        </Link>
+            <Link href="/dashboard/profile">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/profile"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Profile
+              </div>
+            </Link>
 
-        <Link href="/about">
-          <div 
-            onClick={() => setIsOpen(false)}
-            className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
-              router.pathname === "/about" ? "text-gray-900" : ""
-            }`}
-          >
-            About
-          </div>
-        </Link>
+            <Link href="/dashboard/admin/products">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/admin/products"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Products
+              </div>
+            </Link>
 
-        {admin ? (
-          <div className="px-6 py-4 mt-2">
-            <p className="text-[12px] text-gray-500 mb-1">Signed in as</p>
-            <p className="text-[13px] text-gray-900 mb-3">{admin.user_name}</p>
-            <button
-              onClick={() => {
-                onSignOut();
-                setIsOpen(false);
-              }}
-              className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              Sign Out
-            </button>
-          </div>
+            <Link href="/dashboard/reviews">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/reviews"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Reviews
+              </div>
+            </Link>
+
+            <Link href="/dashboard/addproduct">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/addproduct"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Add Product
+              </div>
+            </Link>
+
+            <Link href="/dashboard/settings">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/settings"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Settings
+              </div>
+            </Link>
+
+            <div className="px-6 py-3">
+              {admin ? (
+                <button
+                  onClick={() => {
+                    onSignOut();
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link href="/signin">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )}
+            </div>
+          </>
         ) : (
-          <Link href="/signin">
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="mx-6 mt-4 mb-2 w-[calc(100%-48px)] px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
-            >
-              Sign In
-            </button>
-          </Link>
+          <>
+            <Link href="/">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/" ? "text-gray-900" : ""
+                }`}
+              >
+                Home
+              </div>
+            </Link>
+
+            <Link href="/products">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/products" ? "text-gray-900" : ""
+                }`}
+              >
+                Products
+              </div>
+            </Link>
+
+            <Link href="/about">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/about" ? "text-gray-900" : ""
+                }`}
+              >
+                About
+              </div>
+            </Link>
+
+            <div className="px-6 py-3">
+              {admin ? (
+                <button
+                  onClick={() => {
+                    onSignOut();
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link href="/signin">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

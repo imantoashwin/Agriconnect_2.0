@@ -152,6 +152,15 @@ const EditProductPage = ({ product }) => {
       <div>
         <DashBoardSidebar>
           <div className="w-full max-w-3xl mx-auto px-6">
+            <div className="flex items-center mb-4">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="px-3 py-1.5 text-[13px] font-poppins text-gray-700 hover:text-gray-900 rounded border border-gray-300 hover:border-gray-400"
+              >
+                ← Back
+              </button>
+            </div>
             <h1 className="text-2xl font-semibold text-gray-900 mb-6">Edit Product</h1>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name (readonly) */}

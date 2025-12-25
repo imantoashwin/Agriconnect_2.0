@@ -48,3 +48,28 @@ body {
   color: #2d8659;
   border-bottom: 2px solid #2d8659;
 }
+
+/* Suppress Google Translate banner/tooltip that appears at the top */
+iframe.goog-te-banner-frame,
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+/* Prevent body offset when the banner tries to push content down */
+body {
+  top: 0 !important;
+}
+
+/* Hide Google Translate tooltip balloon that can show at top */
+#goog-gt-tt,
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+/* Ensure no shift from skiptranslate on html */
+html.skiptranslate body {
+  top: 0 !important;
+}

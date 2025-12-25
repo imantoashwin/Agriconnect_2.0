@@ -24,13 +24,13 @@ function DashBoardSidebar({ children }) {
   const { admin } = useSelector((state) => state.admin);
   return (
     <div className="flex">
-      <div className="top-[65px] left-0 h-[calc(100vh-65px)] z-40">
-        <button className="inline-flex items-center peer justify-center rounded-md p-2 text-gray-800 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white group">
+      <div className="dashboard-sidebar top-[65px] left-0 h-[calc(100vh-65px)] z-40">
+        {/* <button className="inline-flex items-center peer justify-center rounded-md p-2 text-gray-800 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white group">
           <GiHamburgerMenu
             className="block md:hidden h-6 w-6"
             aria-hidden="true"
           />
-        </button>
+        </button> */}
         <div className="h-full bg-white overflow-y-auto hidden md:block md:w-60 peer-focus:left-0 peer:transition ease-out delay-150 duration-200 border-r border-gray-100">
           <div className="flex flex-col justify-start item-center">
             {/* <h1 className="text-base text-center cursor-pointer font-bold text-blue-900 border-b border-gray-100 pb-4 w-full">
@@ -159,6 +159,14 @@ function DashBoardSidebar({ children }) {
                   <Link href="/dashboard/addproduct">Add Product</Link>
                 </h3>
               </div>
+              <Link href="/dashboard/settings">
+                <div className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
+                  <MdOutlineSettings className="text-2xl text-gray-600 group-hover:text-white " />
+                  <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
+                    Settings
+                  </h3>
+                </div>
+              </Link>
               {/* <div
                 className={`flex  mb-2 justify-start items-center gap-4 pl-5 ${
                   router.asPath === "/dashboard/admin/users"
@@ -185,20 +193,15 @@ function DashBoardSidebar({ children }) {
               </div> */}
             </div>
             {/* setting  */}
-            <div className=" my-4 border-b border-gray-100 pb-4">
-              <div className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
-                <MdOutlineSettings className="text-2xl text-gray-600 group-hover:text-white " />
-                <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
-                  Settings
-                </h3>
-              </div>
+            {/* <div className=" my-4 border-b border-gray-100 pb-4">
+              
               <div className="flex mb-2 justify-start items-center gap-4 pl-5 hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
                 <MdOutlineMoreHoriz className="text-2xl text-gray-600 group-hover:text-white " />
                 <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
                   More
                 </h3>
               </div>
-            </div>
+            </div> */}
             {/* logout */}
             {/* <div className=" my-4" onClick={onSignOut}>
               <div className="flex mb-2 justify-start items-center gap-4 pl-5 border border-gray-200  hover:bg-gray-900 p-2 rounded-md group cursor-pointer hover:shadow-lg m-auto">
@@ -212,6 +215,12 @@ function DashBoardSidebar({ children }) {
         </div>
       </div>
       <div className="w-full pt-[65px]">{children}</div>
+      <style jsx global>{`
+        /* Hide the entire sidebar container when mobile menu is open */
+        body.dashboard-menu-open .dashboard-sidebar {
+          display: none !important;
+        }
+      `}</style>
     </div>
   );
 }

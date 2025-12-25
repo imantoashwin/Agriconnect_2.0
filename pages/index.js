@@ -8,12 +8,12 @@ import NewsFeed from "../components/NewsFeed/NewsFeed";
 import OrdersLocation from "../components/OrdersLocation/OrdersLocation";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import AdminPanel from "../components/AdminPanel/adminPanel";
-import HomeComponent from "../components/HomeComponent/HomeComponent";
+import HomeComponent1 from "../components/HomeComponent/HomeComponent1";
 export default function Home() {
   return (
     <div className="">
       <Navbar />
-      <HomeComponent />
+      <HomeComponent1 />
       <Footer />
     </div>
     // <AdminPanel/>

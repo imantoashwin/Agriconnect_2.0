@@ -550,7 +550,7 @@ function Signin() {
           {/* Sign Up Link */}
           <div className="max-w-md mx-auto mt-6 text-center">
             <p className="text-gray-600 font-poppins">
-              New here?{" "}
+              Don't have an account?{" "}
               <Link href="/signup">
                 <span className="text-[#2d8659] hover:underline font-medium cursor-pointer">
                   Sign up

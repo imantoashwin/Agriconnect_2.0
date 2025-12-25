@@ -29,8 +29,10 @@ import {
 } from "firebase/firestore";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 function Cart() {
+  const router = useRouter();
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -40,6 +42,19 @@ function Cart() {
   // Stripe setup
   const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
   const stripePromise = loadStripe(publishableKey);
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = () => {
+      const currentUser = localStorage.getItem("currentUser");
+      if (!currentUser && !user.isLoggedIn) {
+        alert("Please sign in to view your cart");
+        router.push("/signin");
+        return;
+      }
+    };
+    checkAuth();
+  }, [user.isLoggedIn, router]);
 
   // Load cart from Firebase when user logs in
   useEffect(() => {
@@ -176,18 +191,45 @@ function Cart() {
     }
   };
 
-  // Enhanced increment function with Firebase sync
+  // Enhanced increment function with Firebase sync and stock validation
   const handleIncrement = async (itemId) => {
     // Find current item from cart BEFORE updating Redux
     const currentItem = cart.find(item => item.id === itemId);
     
-    dispatch(incrementQuantity(itemId));
+    if (!currentItem) return;
     
-    if (currentItem) {
-      await updateFirebaseCart({
-        ...currentItem,
-        quantity: currentItem.quantity + 1
-      }, 'increment');
+    try {
+      // Check available stock from Firebase
+      const productQuery = query(
+        collection(db, "products"),
+        where("productId", "==", itemId)
+      );
+      
+      const productSnapshot = await getDocs(productQuery);
+      
+      if (!productSnapshot.empty) {
+        const productData = productSnapshot.docs[0].data();
+        const availableStock = parseFloat(productData.productStock || 0);
+        
+        // Check if user is trying to add more than available stock
+        if (currentItem.quantity >= availableStock) {
+          alert(`Cannot add more! Only ${availableStock} units available in stock.`);
+          return;
+        }
+        
+        // Proceed with increment if stock is available
+        dispatch(incrementQuantity(itemId));
+        
+        await updateFirebaseCart({
+          ...currentItem,
+          quantity: currentItem.quantity + 1
+        }, 'increment');
+      } else {
+        alert("Product not found. Please refresh the page.");
+      }
+    } catch (error) {
+      console.error("Error checking stock:", error);
+      alert("Error checking product availability. Please try again.");
     }
   };
 
@@ -351,7 +393,7 @@ function Cart() {
 
       if (response.data.success) {
         console.log('✅ Order SMS sent successfully:', response.data.messageSid);
-        alert('Order placed! SMS notification sent successfully.');
+        // alert('Order placed! SMS notification sent successfully.');
       } else {
         console.error('❌ Failed to send SMS:', response.data);
         alert(`SMS notification failed: ${response.data.message || 'Unknown error'}`);

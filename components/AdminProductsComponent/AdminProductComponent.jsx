@@ -45,7 +45,7 @@ function AdminProductComponent() {
           product.productStock ?? product.stock ?? product.quantity ?? 0
         );
 
-        if (product.farmerId === currentUser.uid && stock > 0) {
+        if (product.farmerId === currentUser.uid) {
           // Map Firebase data to match your existing structure
           filteredData.push({
             id: product.productId,
@@ -116,6 +116,7 @@ function AdminProductComponent() {
                   key={index}
                   productName={product.name}
                   productImg={product.image}
+                  stock={product.stock}
                 />
               </Link>
             ))}

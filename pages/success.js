@@ -208,13 +208,13 @@ const Success = () => {
           ) : (
             <>
               <h2 className="mt-3 text-lg font-semibold text-gray-900">Thank you for your order</h2>
-              <p className="mt-1 text-sm text-gray-600">Your payment was successful. A receipt has been emailed.</p>
+              <p className="mt-1 text-sm text-gray-600">Your payment was successful</p>
             </>
           )}
 
           <div className="mt-6 text-sm text-gray-600">
             <span>Need help?</span>
-            <a className="ml-2 text-gray-900 hover:underline" href="mailto:order@agriconnect.com">order@agriconnect.com</a>
+            <a className="ml-2 text-gray-900 hover:underline" href="mailto:agriconnect.turingoo@gmail.com">agriconnect.turingoo@gmail.com</a>
           </div>
 
           <div className="mt-6 flex items-center justify-center gap-3">

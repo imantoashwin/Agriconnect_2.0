@@ -17,13 +17,28 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import Footer from "../components/Footer/Footer";
+import { useRouter } from "next/router";
 
 const OrdersPage = () => {
+  const router = useRouter();
   const user = useSelector((state) => state.user);
   const [orderPurchased, setOrderPurchased] = useState([]);
   const [orderStatus, setOrderStatus] = useState("pending");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = () => {
+      const currentUser = localStorage.getItem("currentUser");
+      if (!currentUser && !user.isLoggedIn) {
+        alert("Please sign in to view your orders");
+        router.push("/signin");
+        return;
+      }
+    };
+    checkAuth();
+  }, [user.isLoggedIn, router]);
 
   // Helper function to safely format dates
   const formatOrderDate = (dateValue) => {

@@ -232,7 +232,7 @@ function DashBoardNavBar() {
   const onSignOut = () => {
     dispatch(logout());
     setAdmin(null);
-    router.push("/dashboard/signin");
+    router.push("/signin");
   };
 
   return (

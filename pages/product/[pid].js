@@ -3,24 +3,27 @@ import Navbar from "../../components/Navbar/Navbar";
 import Styles from "../../styles/IndivualProductPage.module.css";
 import ReactStars from "react-stars";
 import { addToCart } from "../../redux/cartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
 
 // Firebase
 import { db } from "../../firebase";
-import { doc, getDoc, collection, getDocs, addDoc, Timestamp } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, addDoc, Timestamp, query, where, serverTimestamp } from "firebase/firestore";
 import Footer from "../../components/Footer/Footer";
 
 const InduvialPost = (props) => {
   const { loadedProduct } = props;
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const cart = useSelector((state) => state.cart);
   const [stars, setStars] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   // Simulate loading completion after component mounts
   React.useEffect(() => {
@@ -77,6 +80,103 @@ const InduvialPost = (props) => {
       toast.error("Failed to submit review. Please try again.");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // Check if product already exists in cart
+  const checkIfInCart = async (userId, productId) => {
+    try {
+      const cartQuery = query(
+        collection(db, "carts"),
+        where("userId", "==", userId),
+        where("id", "==", productId)
+      );
+      
+      const querySnapshot = await getDocs(cartQuery);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error('Error checking cart:', error);
+      return false;
+    }
+  };
+
+  // Add to Firebase Cart
+  const addToFirebaseCart = async (userId, product) => {
+    try {
+      await addDoc(collection(db, "carts"), {
+        userId: userId,
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        image: product.image,
+        weight: product.weight,
+        location: product.location,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      throw error;
+    }
+  };
+
+  const handleAddToCart = async () => {
+    // Check if user is logged in
+    if (!user.isLoggedIn) {
+      toast.error("Please login to add items to cart!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    // Check if stock is available
+    if (quantity <= 0) {
+      toast.error("This product is out of stock!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    setAddingToCart(true);
+
+    try {
+      const userId = user.user?.id || user.id;
+      
+      // Check if already in cart
+      const alreadyInCart = await checkIfInCart(userId, productId);
+      
+      if (alreadyInCart) {
+        toast.info("Product already in cart!", {
+          position: "bottom-right",
+          autoClose: 2000,
+        });
+        setAddingToCart(false);
+        return;
+      }
+
+      // Add to Redux store
+      dispatch(addToCart(loadedProduct));
+
+      // Add to Firebase
+      await addToFirebaseCart(userId, loadedProduct);
+
+      toast.success("Added to cart successfully!", {
+        position: "bottom-right",
+        autoClose: 2000,
+      });
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error("Failed to add to cart. Please try again.", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+    } finally {
+      setAddingToCart(false);
     }
   };
 

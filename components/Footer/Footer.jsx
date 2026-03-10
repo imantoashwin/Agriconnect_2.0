@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 const Footer = () => {
   return (
     <div className="w-full bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white py-10 px-6 mt-10">
@@ -27,9 +28,9 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4 font-poppins">Quick Links</h3>
             <ul className="space-y-2 text-gray-400 font-poppins text-sm">
-              <li><a href="/about" className="hover:text-white transition-colors">About</a></li>
-              <li><a href="/products" className="hover:text-white transition-colors">Products</a></li>
-              <li><a href="/signin" className="hover:text-white transition-colors">Sign in</a></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
+              <li><Link href="/products" className="hover:text-white transition-colors">Products</Link></li>
+              <li><Link href="/signin" className="hover:text-white transition-colors">Sign in</Link></li>
             </ul>
           </div>
           <div>

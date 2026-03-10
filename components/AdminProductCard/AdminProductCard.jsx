@@ -8,6 +8,7 @@ function AdminProductCard({ productName, productImg, stock }) {
   return (
     <div className="w-full max-w-[280px] bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer">
       <div className="w-full h-[180px] bg-gray-50 flex items-center justify-center relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="max-h-full max-w-full object-contain"
           src={productImg}

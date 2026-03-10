@@ -1,5 +1,4 @@
 import Image from "next/image";
-import home09 from "../../public/Images/home-assets-09.jpg";
 import home10 from "../../public/Images/home-assets-10.jpg";
 
 const HomeComponent4 = () =>{
@@ -14,7 +13,7 @@ const HomeComponent4 = () =>{
             <div className="relative">
               <div className="w-80 h-80 bg-gray-200 rounded-full overflow-hidden">
                 <Image
-                  src={home09} // Replace with actual path or import
+                  src="/Images/home-assets-09.jpg"
                   alt="Harvest Image"
                   width={320} // Direct width and height instead of layout fill
                   height={320} // Matching the container size for proper rendering

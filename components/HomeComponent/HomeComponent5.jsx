@@ -26,7 +26,7 @@ const HomeComponent5 = () =>{
             <p className="text-gray-600 mb-6">
               There are many variations of passages of available but the
               majority have suffered alteration in some form by injected humor
-              or random words which don't look even.
+              or random words which don&apos;t look even.
             </p>
 
             {/* Benefits List */}

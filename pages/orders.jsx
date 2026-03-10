@@ -221,6 +221,7 @@ const OrdersPage = () => {
     if (db && user?.user?.id && user?.isLoggedIn) {
       fetchOrderPurchased(user);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const orderOperations = {

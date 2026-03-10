@@ -91,6 +91,7 @@ const EditProductPage = ({ product }) => {
     });
 
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.id]);
 
   if (loading) {
@@ -206,6 +207,7 @@ const EditProductPage = ({ product }) => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
                 <div className="w-[180px] h-[180px] bg-gray-50 border border-gray-200 rounded flex items-center justify-center overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     name="image"
                     src={editedProduct.image}

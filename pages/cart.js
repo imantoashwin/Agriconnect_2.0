@@ -61,6 +61,7 @@ function Cart() {
     if (user.isLoggedIn && user.user?.id) {
       loadCartFromFirebase();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.isLoggedIn, user.user?.id]);
 
   // Load cart items from Firebase

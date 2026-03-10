@@ -63,7 +63,7 @@ function Signin() {
       }
     }
     setHasCheckedAuth(true);
-  }, [router]); // Remove isAdminMode from dependencies to prevent re-checking when switching
+  }, [router, hasCheckedAuth, isAdminMode]);
 
   // Google Translate initialization
   useEffect(() => {
@@ -550,7 +550,7 @@ function Signin() {
           {/* Sign Up Link */}
           <div className="max-w-md mx-auto mt-6 text-center">
             <p className="text-gray-600 font-poppins">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link href="/signup">
                 <span className="text-[#2d8659] hover:underline font-medium cursor-pointer">
                   Sign up

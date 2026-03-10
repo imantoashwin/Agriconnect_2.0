@@ -37,7 +37,7 @@ function ProfileComponent({ admin, productsSold }) {
         setAdminAnalytics(data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [admin?.id]);
 
   useEffect(() => {
     const fetchAddress = async () => {

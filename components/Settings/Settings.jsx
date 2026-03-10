@@ -33,6 +33,7 @@ function Settings() {
         dispatch(login(parsed));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSaveProfile = () => {

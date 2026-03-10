@@ -197,6 +197,7 @@ function AddProductAdmin() {
             />
             {previewSource && (
               <div className="mt-2 relative inline-block">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={previewSource}
                   alt="Preview"

@@ -235,6 +235,7 @@ function OrderComponent({ product, index, orderStatus, orderId, userId }) {
         key={index}
         className="w-[400px] flex items-center justify-around p-5 bg-white shadow-lg rounded-lg overflow-hidden"
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={product.image}
           className="w-32 h-32 rounded-md object-cover"

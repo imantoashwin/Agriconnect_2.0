@@ -41,6 +41,7 @@ function Profile() {
     if (admin?.id) {
       getProductsAndFilterNames();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [admin]);
 
   if (loading) {

@@ -64,6 +64,7 @@ const PaymentUpdation = () => {
     if (cart.length > 0) {
       updateProductState(cart, user);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cart, user]);
 
   useEffect(() => {

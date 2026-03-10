@@ -36,6 +36,7 @@ const Success = () => {
     setTimeout(() => {
       router.push("/orders");
     }, 8000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Process order after successful Stripe payment

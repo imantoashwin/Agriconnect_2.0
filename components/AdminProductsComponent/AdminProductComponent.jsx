@@ -93,6 +93,7 @@ function AdminProductComponent() {
     if (currentUser) {
       getProducts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   return (

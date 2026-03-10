@@ -8,6 +8,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import {db,auth} from '../../../../firebase';
+import { useSelector } from "react-redux";
 
 // Google Translate Component
 const GoogleTranslate = () => {
@@ -39,8 +40,23 @@ const GoogleTranslate = () => {
 
 const EditProductPage = ({ product }) => {
   const router = useRouter();
+  const isLoggedIn = useSelector((state) => state.admin)?.isLoggedIn;
   const [currentUser, setCurrentUser] = useState(null);
   const [editedProduct, setEditedProduct] = useState(product);
+  const [loading, setLoading] = useState(true);
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = () => {
+      const adminData = localStorage.getItem("admin");
+      if (!adminData && !isLoggedIn) {
+        router.push("/signin");
+        return;
+      }
+      setLoading(false);
+    };
+    checkAuth();
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -70,12 +86,23 @@ const EditProductPage = ({ product }) => {
           console.error("Error loading product:", error);
         }
       } else {
-        router.push('/login');
+        router.push('/signin');
       }
     });
 
     return () => unsubscribe();
   }, [router.query.id]);
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-xl shadow-lg flex items-center gap-3">
+          <div className="w-8 h-8 border-4 border-gray-200 border-t-[#2d8659] rounded-full animate-spin"></div>
+          <p className="font-poppins text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -151,120 +178,120 @@ const EditProductPage = ({ product }) => {
       <DashBoardNavBar />
       <div>
         <DashBoardSidebar>
-          <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4 font-poppins">
-              Edit Product
-            </h1>
-            <div onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Name:
-                </label>
+          <div className="w-full max-w-3xl mx-auto px-6">
+            <div className="flex items-center mb-4">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="px-3 py-1.5 text-[13px] font-poppins text-gray-700 hover:text-gray-900 rounded border border-gray-300 hover:border-gray-400"
+              >
+                ← Back
+              </button>
+            </div>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-6">Edit Product</h1>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name (readonly) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
                 <input
                   type="text"
                   name="name"
                   value={editedProduct.name}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md cursor-not-allowed"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none cursor-not-allowed bg-gray-50"
                   disabled
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Image:
-                </label>
-                <img
-                  name="image"
-                  src={editedProduct.image}
-                  className="w-[150px] h-[150px] px-3 py-2 border border-gray-300 rounded-md"
-                  alt="product-img"
-                />
+
+              {/* Image preview */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+                <div className="w-[180px] h-[180px] bg-gray-50 border border-gray-200 rounded flex items-center justify-center overflow-hidden">
+                  <img
+                    name="image"
+                    src={editedProduct.image}
+                    className="max-w-full max-h-full object-contain"
+                    alt="product"
+                  />
+                </div>
               </div>
 
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat ">
-                  Category:
-                </label>
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <input
                   type="text"
                   name="category"
                   value={editedProduct.category}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Description:
-                </label>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                 <textarea
                   name="description"
                   value={editedProduct.description}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Price (in ₹-):
-                </label>
+
+              {/* Price */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
                 <input
                   type="number"
                   name="price"
                   value={editedProduct.price}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Stock (in {editedProduct.weight}):
-                </label>
+
+              {/* Quantity */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Stock ({editedProduct.weight})</label>
                 <input
                   type="number"
                   name="quantity"
                   value={editedProduct.quantity}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Weight (in Unit):
-                </label>
+
+              {/* Weight */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Unit of Measurement</label>
                 <input
                   type="text"
                   name="weight"
                   value={editedProduct.weight}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block font-bold mb-2 font-montserrat">
-                  Location (in Km):
-                </label>
-                <input
-                  type="text"
-                  name="location"
-                  value={editedProduct.location}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
+              {/* Actions */}
+              <div className="flex items-center gap-4 pt-2">
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="px-4 py-2 bg-gray-900 hover:bg-gray-700 text-white font-medium rounded"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded"
+                  onClick={(e) => onDeleteProduct(e, currentUser?.uid, editedProduct.productId)}
+                >
+                  Delete
+                </button>
               </div>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="px-2 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-md"
-              >
-                Save
-              </button>
-              <button
-                className="px-2 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-md  mx-10"
-                onClick={(e) => onDeleteProduct(e, currentUser?.uid, editedProduct.productId)}
-              >
-                Delete
-              </button>
-            </div>
+            </form>
           </div>
           <ToastContainer />
         </DashBoardSidebar>

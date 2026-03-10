@@ -226,96 +226,97 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="grid grid-cols-3 items-center px-6 py-2 bg-white border-b border-gray-100">
-        <div className="col-span-1 flex-shrink-0 flex items-center">
-          <Link href="/" passHref>
-            <div className="cursor-pointer">
-              <Image
-                src="/Images/Logo/Agriconnect_logo.png"
-                className="cursor-pointer"
-                alt="logo"
-                width={150}
-                height={48}
-              />
+      <nav className="flex items-center justify-between px-6 sm:px-8 py-4 bg-white">
+        {/* Logo */}
+        <Link href="/">
+          <div className="cursor-pointer flex-shrink-0">
+            <Image
+              src="/Images/Logo/Agriconnect_logo.png"
+              className="cursor-pointer"
+              alt="logo"
+              width={140}
+              height={45}
+            />
+          </div>
+        </Link>
+
+        {/* Desktop Navigation Links */}
+        <div className="hidden lg:flex items-center justify-center gap-8 font-poppins text-[13px] text-gray-600 flex-1 mx-8">
+          <Link href="/">
+            <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/" ? "text-gray-900" : ""}`}>
+              Home
             </div>
           </Link>
+
+          {user && (
+            <Link href="/products">
+              <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/products" ? "text-gray-900" : ""}`}>
+                Products
+              </div>
+            </Link>
+          )}
+
+          {user && (
+            <Link href="/orders">
+              <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/orders" ? "text-gray-900" : ""}`}>
+                Orders
+              </div>
+            </Link>
+          )}
+
+          <Link href="/about">
+            <div className={`hover:text-gray-900 transition-colors cursor-pointer ${router.pathname === "/about" ? "text-gray-900" : ""}`}>
+              About
+            </div>
+          </Link>
+
+          {user && (
+            <Link href="/cart">
+              <div className={`cursor-pointer font-poppins text-[13px] hover:text-gray-900 transition-colors ${router.pathname === "/cart" ? "text-gray-900" : ""}`}>
+                <p className="flex items-center gap-1.5">
+                  <span>Cart</span>
+                  <span className="bg-gray-900 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] text-center">{getItemsCount()}</span>
+                </p>
+              </div>
+            </Link>
+          )}
         </div>
 
-        <div className={`${Styles.navLinks} col-span-1`}>
-          <div
-            className={`${Styles.navRes} flex items-center justify-center gap-6 font-poppins text-[14px] text-gray-700`}
-          >
-            <div className={`hover:text-[#2d8659] transition-colors ${router.pathname === "/" ? "active" : ""}`}>
-              <Link href="/">Home</Link>
-            </div>
-
-            {user && (
-              <div className={`hover:text-[#2d8659] transition-colors ${router.pathname === "/products" ? "active" : ""}`}>
-                <Link href="/products">Products</Link>
-              </div>
-            )}
-
-            {user && (
-              <div className={`hover:text-[#2d8659] transition-colors ${router.pathname === "/orders" ? "active" : ""}`}>
-                <Link href="/orders">Orders</Link>
-              </div>
-            )}
-
-            <div className={`hover:text-[#2d8659] transition-colors ${router.pathname === "/about" ? "active" : ""}`}>
-              <Link href="/about">About</Link>
-            </div>
-
-            {user && (
-              <div
-                className={`cursor-pointer font-poppins text-[16px] hover:text-[#2d8659] transition-colors ${
-                  router.pathname === "/cart" ? "active" : ""
-                }`}
-              >
-                <Link href="/cart" passHref>
-                  <p className="flex items-center gap-1">
-                    <span>Cart</span>
-                    <span className="bg-[#2d8659] text-white text-xs px-2 py-0.5 rounded-full">{getItemsCount()}</span>
-                  </p>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="col-span-1 flex items-center justify-end gap-4">
-          {/* ✅ Hidden Google Translate Element - Required for functionality but invisible */}
-          <div className="translate-micro" style={{ display: 'none' }}>
+        {/* Right Side Actions */}
+        <div className="flex items-center justify-end gap-3">
+          {/* Hidden Google Translate Element */}
+          <div className="translate-micro hidden lg:block" style={{ display: 'none' }}>
             <div id="google_translate_element" className="translate-icon"></div>
             <div className="custom-translate-btn" title="Translate">🌐</div>
           </div>
 
-          {user ? (
-            <div className={`${Styles.navLeft} flex items-center gap-4`}>
-              <p className="font-poppins text-[15px] text-gray-700 md_max:hidden">{user.user_name}</p>
-              <Link href="/" passHref>
-                <button
-                  className="px-4 py-2 text-sm font-poppins text-gray-700 hover:text-[#2d8659] transition-colors md_max:hidden"
-                  onClick={() => onSignOut()}
-                >
-                  Sign Out
-                </button>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex items-center gap-3 md_max:hidden">
-              <Link href="/signin" passHref>
-                <button className="px-3 py-1.5 text-xs font-poppins text-gray-700 hover:text-[#2d8659] transition-colors border border-gray-200 rounded-md">
-                  Sign In
-                </button>
-              </Link>
+          {/* Desktop User Menu */}
+          {user && (
+            <div className="hidden lg:flex items-center gap-4">
+              <p className="font-poppins text-[13px] text-gray-600">{user.user_name}</p>
+              <button
+                className="px-4 py-1.5 text-[13px] font-poppins text-gray-600 hover:text-gray-900 transition-colors"
+                onClick={() => onSignOut()}
+              >
+                Sign Out
+              </button>
             </div>
           )}
 
-          {/* Mobile Translate Icon */}
-          <div className="mobile-nav-translate-btn md:hidden mr-1" title="Translate">🌐</div>
+          {!user && router.pathname !== "/signin" && router.pathname !== "/signup" && (
+            <Link href="/signin">
+              <button className="hidden lg:inline-block px-4 py-1.5 text-[13px] font-poppins text-gray-600 hover:text-gray-900 transition-colors">
+                Sign In
+              </button>
+            </Link>
+          )}
 
+          {/* Mobile Translate Icon */}
+          <div className="mobile-nav-translate-btn lg:hidden mr-2" title="Translate">🌐</div>
+
+          {/* Mobile Hamburger Menu */}
           <button
-            className="flex flex-col h-8 w-8 justify-center cursor-pointer items-center group md:hidden"
+            className="flex lg:hidden flex-col h-8 w-8 justify-center cursor-pointer items-center group"
             onClick={() => setIsOpen(!isOpen)}
           >
             <div
@@ -339,9 +340,102 @@ const Navbar = () => {
             />
           </button>
         </div>
-        
-        {isOpen && <MobileNavLine />}
       </nav>
+
+      {/* Mobile Navigation Dropdown */}
+      {isOpen && (
+        <div className="fixed top-[64px] left-0 right-0 bg-white border-t border-gray-100 z-40 lg:hidden">
+          <div className="flex flex-col py-2">
+            <Link href="/">
+              <div 
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/" ? "text-gray-900" : ""
+                }`}
+              >
+                Home
+              </div>
+            </Link>
+
+            {user && (
+              <Link href="/products">
+                <div 
+                  onClick={() => setIsOpen(false)}
+                  className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                    router.pathname === "/products" ? "text-gray-900" : ""
+                  }`}
+                >
+                  Products
+                </div>
+              </Link>
+            )}
+
+            {user && (
+              <Link href="/orders">
+                <div 
+                  onClick={() => setIsOpen(false)}
+                  className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                    router.pathname === "/orders" ? "text-gray-900" : ""
+                  }`}
+                >
+                  Orders
+                </div>
+              </Link>
+            )}
+
+            <Link href="/about">
+              <div 
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/about" ? "text-gray-900" : ""
+                }`}
+              >
+                About
+              </div>
+            </Link>
+
+            {user && (
+              <Link href="/cart">
+                <div 
+                  onClick={() => setIsOpen(false)}
+                  className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                    router.pathname === "/cart" ? "text-gray-900" : ""
+                  }`}
+                >
+                  Cart ({getItemsCount()})
+                </div>
+              </Link>
+            )}
+
+            {user ? (
+              <div className="px-6 py-4 mt-2">
+                <p className="text-[12px] text-gray-500 mb-1">Signed in as</p>
+                <p className="text-[13px] text-gray-900 mb-3">{user.user_name}</p>
+                <button
+                  onClick={() => {
+                    onSignOut();
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              router.pathname !== "/signin" && router.pathname !== "/signup" && (
+                <Link href="/signin">
+                  <button 
+                    onClick={() => setIsOpen(false)}
+                    className="mx-6 mt-4 mb-2 w-[calc(100%-48px)] px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ✅ Translate Button Styles */}
       <style jsx global>{`
@@ -495,74 +589,6 @@ const Navbar = () => {
         }
       `}</style>
     </>
-  );
-};
-
-const MobileNavLine = () => {
-  const router = useRouter();
-  const cart = useSelector((state) => state.cart);
-  const [user, setUser] = useState(null);
-
-  const getItemsCount = () => {
-    return cart.reduce((accumulator, item) => accumulator + item.quantity, 0);
-  };
-
-  const onSignOut = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-  };
-
-  useEffect(() => {
-    const currUser = localStorage.getItem("user");
-    if (currUser) {
-      setUser(JSON.parse(currUser));
-    }
-  }, []);
-
-  return (
-    <div className="w-full bg-white border-t border-gray-100 flex flex-col items-center py-8 gap-6 md:hidden">
-      <div className={`font-poppins text-gray-700 hover:text-[#2d8659] transition-colors ${router.pathname === "/" ? "active" : ""}`}>
-        <Link href="/">Home</Link>
-      </div>
-      {user && (
-        <div className={`font-poppins text-gray-700 hover:text-[#2d8659] transition-colors ${router.pathname === "/products" ? "active" : ""}`}>
-          <Link href="/products">Products</Link>
-        </div>
-      )}
-      <div className={`font-poppins text-gray-700 hover:text-[#2d8659] transition-colors ${router.pathname === "/about" ? "active" : ""}`}>
-        <Link href="/about">About</Link>
-      </div>
-      {user && (
-        <div className={`font-poppins text-gray-700 hover:text-[#2d8659] transition-colors cursor-pointer ${
-            router.pathname === "/cart" ? "active" : ""
-          }`}
-        >
-          <Link href="/cart" passHref>
-            <p>Cart ({getItemsCount()})</p>
-          </Link>
-        </div>
-      )}
-
-        {user && (
-        <div>
-          <Link href="/" passHref>
-            <button
-              className="px-6 py-2 text-sm font-poppins text-gray-700 hover:text-[#2d8659] transition-colors"
-              onClick={() => onSignOut()}
-            >
-              Sign Out
-            </button>
-          </Link>
-        </div>
-      )}
-      {!user && (
-        <Link href="/signin" passHref>
-          <button className="px-6 py-2 text-sm font-poppins text-gray-700 hover:text-[#2d8659] transition-colors">
-            Sign In
-          </button>
-        </Link>
-      )}
-    </div>
   );
 };
 

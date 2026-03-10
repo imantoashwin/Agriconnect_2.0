@@ -14,7 +14,7 @@ function AddProductAdmin() {
   const [productRate, setProductRate] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productQuantity, setProductQuantity] = useState("");
-  const [productLocation, setProductLocation] = useState("");
+  const [productLocation, setProductLocation] = useState("0");
   const [productPicture, setProductPicture] = useState("");
   const [productWeight, setProductWeight] = useState("");
   const [fileInputState, setFileInputState] = useState("");
@@ -111,7 +111,7 @@ function AddProductAdmin() {
 
       // Reset form
       setProductDescription("");
-      setProductLocation("");
+      setProductLocation("0");
       setProductName("");
       setProductPicture("");
       setProductQuantity("");
@@ -136,35 +136,16 @@ function AddProductAdmin() {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+    
     setFile(file);
     previewFile(file);
     setFileInputState(e.target.value);
-  };
-
-  const previewFile = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setPreviewSource(reader.result);
-    };
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      toast.warning("Upload an image", {
-        position: "bottom-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-      });
-      return;
-    }
-
-    // Convert file to base64 (same as your HTML code)
+    
+    // Automatically upload the image
     const reader = new FileReader();
     reader.onload = function () {
-      const base64Image = reader.result; // Data URL
+      const base64Image = reader.result;
       setProductPicture(base64Image);
       toast.success("Image uploaded successfully!", {
         position: "bottom-right",
@@ -176,164 +157,166 @@ function AddProductAdmin() {
     reader.readAsDataURL(file);
   };
 
+  const previewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const handleRemoveImage = () => {
+    setFile(null);
+    setPreviewSource("");
+    setProductPicture("");
+    setFileInputState("");
+    toast.info("Image removed", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+    });
+  };
+
   return (
     <>
+      <div className="w-full h-full px-16 py-6 max-w-5xl mx-auto">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-8">Add New Product</h1>
 
-      <div className="w-full h-full">
-        <div className="relative w-full h-96 flex items-center flex-col space-y-32">
-          <h1 className="text-3xl mt-10">Enter Product Details to Add</h1>
-          <div>
-            <form onSubmit={handleFormSubmit}>
-              <input
-                type="file"
-                name="image"
-                onChange={(e) => {
-                  handleFileInputChange(e);
-                }}
-                value={fileInputState}
-              />
-              {previewSource && (
+        {/* Image Upload Section */}
+        <div className="mb-8 bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Product Image</h2>
+          <div className="flex flex-col gap-4">
+            <input
+              type="file"
+              name="image"
+              onChange={handleFileInputChange}
+              value={fileInputState}
+              className="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-gray-900 file:text-white hover:file:bg-gray-700 cursor-pointer"
+              accept="image/*"
+            />
+            {previewSource && (
+              <div className="mt-2 relative inline-block">
                 <img
                   src={previewSource}
                   alt="Preview"
-                  style={{ height: "300px" }}
+                  className="h-48 w-auto object-cover rounded border border-gray-200"
                 />
-              )}
-              <button type="submit">Upload</button>
-            </form>
-            {uploadedFile && (
-              <div>
-                <h2>Uploaded File:</h2>
-                <img src={productPicture} alt="uploaded-image" style={{ height: "300px" }} />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-700 transition-colors font-bold text-lg"
+                  title="Remove image"
+                >
+                  ×
+                </button>
               </div>
             )}
-            {uploadError && <div>{uploadError}</div>}
+          </div>
+          {uploadError && <p className="mt-2 text-sm text-red-600">{uploadError}</p>}
+        </div>
+
+        {/* Product Details Form */}
+        <form onSubmit={onAddProduct} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Product Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Product Name
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Gold Rice"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              />
+            </div>
+
+            {/* Product Type */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Product Category
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Grains, Vegetables"
+                value={productType}
+                onChange={(e) => setProductType(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              />
+            </div>
+
+            {/* Product Rate */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Price per Unit
+              </label>
+              <input
+                type="number"
+                placeholder="₹"
+                value={productRate}
+                onChange={(e) => setProductRate(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              />
+            </div>
+
+            {/* Measuring Weight */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Unit of Measurement
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., /kg, /piece"
+                value={productWeight}
+                onChange={(e) => setProductWeight(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              />
+            </div>
+
+            {/* Product Quantity */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Stock Quantity
+              </label>
+              <input
+                type="number"
+                placeholder="Available stock"
+                value={productQuantity}
+                onChange={(e) => setProductQuantity(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+              />
+            </div>
           </div>
 
-          <form className="w-full max-w-lg" onSubmit={onAddProduct}>
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-first-name"
-                >
-                  Product Name
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  id="grid-first-name"
-                  type="text"
-                  placeholder="Eg. Gold Rice"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-3">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-last-name"
-                >
-                  Product Type
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-last-name"
-                  type="text"
-                  placeholder="Eg. Grains"
-                  value={productType}
-                  onChange={(e) => setProductType(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full px-3">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-rate"
-                >
-                  Product Rate (per given measuring weight)
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-rate"
-                  type="number"
-                  placeholder="₹-"
-                  value={productRate}
-                  onChange={(e) => setProductRate(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-2">
-              <div className="w-full px-3">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-description"
-                >
-                  Product Description
-                </label>
-                <textarea
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-description"
-                  placeholder="Enter the description here..."
-                  maxLength={120}
-                  value={productDescription}
-                  onChange={(e) => setProductDescription(e.target.value)}
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-Quantity"
-                >
-                  Product Quantity (stock - based on the measure given)
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-Quantity"
-                  placeholder="Enter the stock..."
-                  value={productQuantity}
-                  onChange={(e) => setProductQuantity(e.target.value)}
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-location"
-                >
-                  Product Location (in km)
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-location"
-                  placeholder="Eg. 5km"
-                  value={productLocation}
-                  onChange={(e) => setProductLocation(e.target.value)}
-                />
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-type-weight"
-                >
-                  Measuring Weight
-                </label>
-                <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="grid-type-weight"
-                  type="text"
-                  placeholder="Eg. /kg (/ is required)"
-                  value={productWeight}
-                  onChange={(e) => setProductWeight(e.target.value)}
-                />
-              </div>
-            </div>
+          {/* Product Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Product Description
+            </label>
+            <textarea
+              placeholder="Enter product details..."
+              maxLength={120}
+              value={productDescription}
+              onChange={(e) => setProductDescription(e.target.value)}
+              rows={4}
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+            />
+            <p className="mt-1 text-xs text-gray-500">{productDescription.length}/120 characters</p>
+          </div>
+
+          {/* Submit Button */}
+          <div className="pt-4">
             <button
-              className="bg-[#20E58F] p-3 w-24 font-semibold rounded-md mb-5"
               type="submit"
+              className="bg-gray-900 text-white py-3 px-8 rounded hover:bg-gray-700 transition-colors font-medium"
             >
-              Add
+              Add Product
             </button>
-          </form>
-          <ToastContainer />
-        </div>
+          </div>
+        </form>
+        <ToastContainer />
       </div>
     </>
   );

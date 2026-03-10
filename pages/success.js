@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { BsBagCheckFill } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { runFireworks } from "../lib/utils";
+import Navbar from "../components/Navbar/Navbar";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,13 +31,11 @@ const Success = () => {
   useEffect(() => {
     // Process the order when component mounts
     processSuccessfulStripeOrder();
-    
+
     // Clear cart and redirect after delay
     setTimeout(() => {
       router.push("/orders");
     }, 8000);
-    
-    runFireworks();
   }, []);
 
   // Process order after successful Stripe payment
@@ -189,61 +187,48 @@ const Success = () => {
   };
 
   return (
-    <div className="w-[100vw] h-[100vh] flex flex-col items-center justify-center">
-      <div className="flex flex-col items-center justify-center w-[80%] h-[50%] bg-[#DCDCDC] rounded-lg">
-        <p className="text-green-600 text-[40px]">
-          <BsBagCheckFill />
-        </p>
-        
-        {processing ? (
-          <>
-            <h2 className="capitalize mt-[15px] font-[900] text-[30px] text-[#324d67]">
-              Processing your order...
-            </h2>
-            <div className="flex items-center justify-center mt-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl shadow-sm p-6 text-center">
+          <div className="flex items-center justify-center">
+            <div className="text-green-600 text-4xl">
+              <BsBagCheckFill />
             </div>
-          </>
-        ) : (
-          <>
-            <h2 className="capitalize mt-[15px] font-[900] text-[40px] text-[#324d67]">
-              Thank you for your order!
-            </h2>
-            <p className="text-[16px] text-center font-[600]">
-              Check your email inbox for the receipt.
-            </p>
-          </>
-        )}
-        
-        <p className="text-[16px] font-[600] text-center m-[10px] mt-[30px]">
-          If you have any questions, please email
-          <a className="ml-5 text-[#f02d34]" href="mailto:order@example.com">
-            order@agriconnect.com
-          </a>
-        </p>
+          </div>
 
-        <div className="flex gap-4 mt-[40px]">
-          <Link href="/orders" passHref>
-            <button
-              type="button"
-              className="py-[10px] px-[12px] rounded-3xl uppercase border-none text-[16px] cursor-pointer bg-[#6366f1] hover:scale-105 transition duration-150 ease-out hover:ease-in text-white"
-            >
-              View Orders
-            </button>
-          </Link>
-          
-          <Link href="/products" passHref>
-            <button
-              type="button"
-              className="py-[10px] px-[12px] rounded-3xl uppercase border-none text-[16px] cursor-pointer bg-[#21E591] hover:scale-105 transition duration-150 ease-out hover:ease-in text-white"
-            >
-              Continue Shopping
-            </button>
-          </Link>
+          {processing ? (
+            <>
+              <h2 className="mt-3 text-lg font-semibold text-gray-900">Processing your order…</h2>
+              <p className="mt-1 text-sm text-gray-600">This will take just a moment.</p>
+              <div className="flex items-center justify-center mt-4">
+                <div className="w-6 h-6 border-4 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="mt-3 text-lg font-semibold text-gray-900">Thank you for your order</h2>
+              <p className="mt-1 text-sm text-gray-600">Your payment was successful</p>
+            </>
+          )}
+
+          <div className="mt-6 text-sm text-gray-600">
+            <span>Need help?</span>
+            <a className="ml-2 text-gray-900 hover:underline" href="mailto:agriconnect.turingoo@gmail.com">agriconnect.turingoo@gmail.com</a>
+          </div>
+
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <Link href="/orders">
+              <button type="button" className="px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-700 text-sm font-medium">View orders</button>
+            </Link>
+            <Link href="/products">
+              <button type="button" className="px-4 py-2 rounded-md border border-gray-300 text-sm font-medium text-gray-900 hover:bg-gray-100">Continue shopping</button>
+            </Link>
+          </div>
         </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </>
   );
 };
 

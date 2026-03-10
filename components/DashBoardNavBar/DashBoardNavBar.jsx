@@ -11,8 +11,24 @@ function DashBoardNavBar() {
   const dispatch = useDispatch();
   const [admin, setAdmin] = useState(null);
 
-  const genericHamburgerLine = `h-1 w-6 my-1 rounded-full bg-black transition ease transform duration-300`;
+  const genericHamburgerLine = `h-0.5 w-5 my-0.5 rounded-full bg-gray-700 transition ease transform duration-300`;
   const [isOpen, setIsOpen] = useState(false);
+  // Hide sidebar when mobile menu is open
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const cls = "dashboard-menu-open";
+      if (isOpen) {
+        document.body.classList.add(cls);
+      } else {
+        document.body.classList.remove(cls);
+      }
+    }
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("dashboard-menu-open");
+      }
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const currAdmin = localStorage.getItem("admin");
@@ -216,127 +232,92 @@ function DashBoardNavBar() {
   const onSignOut = () => {
     dispatch(logout());
     setAdmin(null);
-    router.push("/dashboard/admin/signin");
+    router.push("/signin");
   };
 
   return (
     <>
-      <nav className=" flex flex-row items-center flex-wrap p-3  ">
-        <div className="flex-1">
-          <div>
+      <nav className="flex items-center justify-between px-6 sm:px-8 py-4 bg-white">
+        {/* Logo */}
+        <Link href="/">
+          <div className="cursor-pointer flex-shrink-0">
             <Image
               src="/Images/Logo/Agriconnect_logo.png"
               className="cursor-pointer"
               alt="logo"
-              width={220}
-              height={120}
+              width={140}
+              height={45}
             />
           </div>
+        </Link>
+
+        {/* Desktop Navigation Links - Empty for dashboard */}
+        <div className="hidden lg:flex items-center justify-center gap-6 font-poppins text-[14px] text-gray-700 flex-1 mx-8">
+          {/* Dashboard specific links can go here if needed */}
         </div>
 
-        <div className={`${Styles.navLinks} flex-1`}>
-          <div
-            className={`${Styles.navRes} flex items-center justify-between font-dnsansItal text-[20px] `}
-          >
-            {/* <div className={`${router.pathname === "/" ? "active" : ""} `}>
-              <Link href="/dashboard/admin/profile/1">Home</Link>
-            </div> */}
-
-            {/* <div
-              className={`${router.pathname === "/products" ? "active" : ""}`}
-            >
-              <Link href="/dashboard/admin/products">Products</Link>
-            </div> */}
-            {/* <div className={`${router.pathname === "/about" ? "active" : ""}`}>
-              <Link href="/about">More </Link>
-            </div> */}
+        {/* Right Side Actions */}
+        <div className="flex items-center justify-end gap-3">
+          {/* Hidden Google Translate Element */}
+          <div className="translate-micro-dashboard hidden lg:block" style={{ display: 'none' }}>
+            <div id="google_translate_element_dashboard" className="translate-icon-dashboard"></div>
+            <div className="custom-translate-btn-dashboard" title="Translate">🌐</div>
           </div>
-        </div>
 
-        {/* ✅ Hidden Google Translate Element - Required for functionality but invisible */}
-        <div className="translate-micro-dashboard" style={{ display: 'none' }}>
-          <div
-            id="google_translate_element_dashboard"
-            className="translate-icon-dashboard"
-          ></div>
-          <div className="custom-translate-btn-dashboard" title="Translate">
-            🌐
-          </div>
-        </div>
-
-        <div className="flex-1 flex justify-end items-center">
-          {admin ? (
-            <div className={`${Styles.navLeft} flex justify-end relative`}>
-              <Image
-                src="/Images/Icons/arrowAdmin.png"
-                width={30}
-                height={30}
-                alt="admin"
-              />
-              <p
-                className={`${Styles.navUserbar} flex flex-wrap  font-dnsansItal text-[20px] ml-3 mr-10 md_max:flex-row sm_max:text-[19px]`}
+          {/* Desktop User Menu */}
+          {admin && (
+            <div className="hidden lg:flex items-center gap-4">
+              <p className="font-poppins text-[13px] text-gray-600">{admin.user_name}</p>
+              <button
+                className="px-4 py-1.5 text-[13px] font-poppins text-gray-600 hover:text-gray-900 transition-colors"
+                onClick={() => onSignOut()}
               >
-                {admin.user_name}
-              </p>
-              <Link href="/" passHref>
-                <p
-                  className="font-dnsansItal text-[20px] cursor-pointer md_max:hidden mr-4"
-                  onClick={() => onSignOut()}
-                >
-                  Sign Out
-                </p>
-              </Link>
-            </div>
-          ) : (
-            <div
-              className={` flex items-center justify-end mr-5 md_max:hidden`}
-            >
-              <Image
-                src="/images/Icons/Arrow_icon.png"
-                alt="arrow-icon"
-                width={30}
-                height={30}
-              />
-              <Link href="/signin" passHref>
-                <p className="ml-2 font-dnsansItal cursor-pointer text-[20px]">
-                  Sign In
-                </p>
-              </Link>
+                Sign Out
+              </button>
             </div>
           )}
-        </div>
 
-        {/* ✅ Mobile Translate Icon - Only visible on mobile, positioned left of hamburger */}
-        <div className="mobile-nav-translate-btn-dashboard md:hidden mr-3" title="Translate">
-          🌐
-        </div>
+          {!admin && (
+            <Link href="/signin">
+              <button className="hidden lg:inline-block px-4 py-1.5 text-[13px] font-poppins text-gray-600 hover:text-gray-900 transition-colors">
+                Sign In
+              </button>
+            </Link>
+          )}
 
-        <button
-          className="flex flex-col h-12 w-12 border-2  rounded justify-center cursor-pointer items-center group md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <div
-            className={`${genericHamburgerLine} ${
-              isOpen
-                ? "rotate-45 translate-y-3 opacity-50 group-hover:opacity-100"
-                : "opacity-50 group-hover:opacity-100"
-            }`}
-          />
-          <div
-            className={`${genericHamburgerLine} ${
-              isOpen ? "opacity-0" : "opacity-50 group-hover:opacity-100"
-            }`}
-          />
-          <div
-            className={`${genericHamburgerLine} ${
-              isOpen
-                ? "-rotate-45 -translate-y-3 opacity-50 group-hover:opacity-100"
-                : "opacity-50 group-hover:opacity-100"
-            }`}
-          />
-        </button>
-        {isOpen && <MobileNavLine />}
+          {/* Mobile Translate Icon */}
+          <div className="mobile-nav-translate-btn-dashboard md:hidden mr-2" title="Translate">🌐</div>
+
+          {/* Mobile Hamburger Menu */}
+          <button
+            className="flex md:hidden flex-col h-8 w-8 justify-center cursor-pointer items-center group"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <div
+              className={`${genericHamburgerLine} ${
+                isOpen
+                  ? "rotate-45 translate-y-3 opacity-50 group-hover:opacity-100"
+                  : "opacity-50 group-hover:opacity-100"
+              }`}
+            />
+            <div
+              className={`${genericHamburgerLine} ${
+                isOpen ? "opacity-0" : "opacity-50 group-hover:opacity-100"
+              }`}
+            />
+            <div
+              className={`${genericHamburgerLine} ${
+                isOpen
+                  ? "-rotate-45 -translate-y-3 opacity-50 group-hover:opacity-100"
+                  : "opacity-50 group-hover:opacity-100"
+              }`}
+            />
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile Navigation Dropdown */}
+      {isOpen && <MobileNavLine admin={admin} onSignOut={onSignOut} setIsOpen={setIsOpen} />}
 
       {/* ✅ Translate Button Styles */}
       <style jsx global>{`
@@ -423,16 +404,12 @@ function DashBoardNavBar() {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          font-size: 20px;
+          width: 32px;
+          height: 32px;
+          font-size: 18px;
           cursor: pointer;
-          border-radius: 10px;
-          background: #f4f8f6;
-          border: 2px solid #004e16;
-          color: #004e16;
-          box-shadow: 0 4px 15px rgba(70, 181, 127, 0.4);
-          position: relative;
+          border-radius: 50%;
+          transition: all 0.2s ease;
         }
 
         .mobile-nav-translate-btn-dashboard:active {
@@ -493,60 +470,175 @@ function DashBoardNavBar() {
   );
 }
 
-const MobileNavLine = () => {
+const MobileNavLine = ({ admin, onSignOut, setIsOpen }) => {
   const router = useRouter();
-  const cart = useSelector((state) => state.cart);
-  const [user, setAdmin] = useState(null);
+
+  const isDashboard = router.pathname.startsWith("/dashboard");
 
   return (
-    <div
-      className={`w-[100%] h-[70vh] bg-[#c2f5db] flex flex-col items-center justify-around md:hidden`}
-    >
-      <div className={`${router.pathname === "/" ? "active" : ""} `}>
-        <Link href="/">Home</Link>
-      </div>
-      <div className={`${router.pathname === "/products" ? "active" : ""}`}>
-        <Link href="/products">Products</Link>
-      </div>
-      <div className={`${router.pathname === "/about" ? "active" : ""}`}>
-        <Link href="/about">About</Link>
-      </div>
-      <div
-        className={` cursor-pointer ${
-          router.pathname === "/cart" ? "active" : ""
-        }`}
-      >
-        <Link href="/cart" passHref>
-          <p>Cart </p>
-        </Link>
-      </div>
-      {user && (
-        <div>
-          <Link href="/" passHref>
-            <p
-              className="font-dnsansItal text-[18px] cursor-pointer "
-              onClick={() => onSignOut()}
-            >
-              Sign Out
-            </p>
-          </Link>
-        </div>
-      )}
-      <div>
-        {!user && (
-          <div className={` flex items-center justify-end mr-5 `}>
-            <Image
-              src="/images/Icons/Arrow_icon.png"
-              alt="arrow-icon"
-              width={30}
-              height={30}
-            />
-            <Link href="/signin" passHref>
-              <p className="ml-2 font-dnsansItal cursor-pointer text-[20px]">
-                Sign In
-              </p>
+    <div className="fixed top-[64px] left-0 right-0 bg-white border-t border-gray-100 z-40 lg:hidden">
+      <div className="flex flex-col py-2">
+        {isDashboard ? (
+          <>
+            <Link href={admin?.id ? `/dashboard/admin/profile/${admin.id}` : "/dashboard/profile"}>
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === (admin?.id ? `/dashboard/admin/profile/${admin.id}` : "/dashboard/profile")
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Dashboard
+              </div>
             </Link>
-          </div>
+
+            <Link href="/dashboard/profile">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/profile"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Profile
+              </div>
+            </Link>
+
+            <Link href="/dashboard/admin/products">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/admin/products"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Products
+              </div>
+            </Link>
+
+            <Link href="/dashboard/reviews">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/reviews"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Reviews
+              </div>
+            </Link>
+
+            <Link href="/dashboard/addproduct">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/addproduct"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Add Product
+              </div>
+            </Link>
+
+            <Link href="/dashboard/settings">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] transition-colors cursor-pointer ${
+                  router.asPath === "/dashboard/settings"
+                    ? "text-gray-900"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Settings
+              </div>
+            </Link>
+
+            <div className="px-6 py-3">
+              {admin ? (
+                <button
+                  onClick={() => {
+                    onSignOut();
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link href="/signin">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <Link href="/">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/" ? "text-gray-900" : ""
+                }`}
+              >
+                Home
+              </div>
+            </Link>
+
+            <Link href="/products">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/products" ? "text-gray-900" : ""
+                }`}
+              >
+                Products
+              </div>
+            </Link>
+
+            <Link href="/about">
+              <div
+                onClick={() => setIsOpen(false)}
+                className={`px-6 py-3 font-poppins text-[13px] text-gray-600 hover:text-gray-900 transition-colors cursor-pointer ${
+                  router.pathname === "/about" ? "text-gray-900" : ""
+                }`}
+              >
+                About
+              </div>
+            </Link>
+
+            <div className="px-6 py-3">
+              {admin ? (
+                <button
+                  onClick={() => {
+                    onSignOut();
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                >
+                  Sign Out
+                </button>
+              ) : (
+                <Link href="/signin">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-full px-4 py-2 text-[13px] font-poppins text-gray-900 bg-gray-100 hover:bg-gray-200 transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </Link>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

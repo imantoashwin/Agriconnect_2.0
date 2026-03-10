@@ -28,8 +28,7 @@ function DashBoardPage() {
             // User doesn't exist in Firestore or doesn't have farmer role
             console.log("User not found or invalid role");
             setVerifyAdmin(false);
-            // Optionally redirect to signin
-            // router.push("/auth/signin");
+            router.push("/signin");
           }
         } else if (user && user.uid !== adminId) {
           // User is authenticated but trying to access different user's dashboard
@@ -41,8 +40,7 @@ function DashBoardPage() {
           // User is not authenticated
           console.log("User not authenticated");
           setVerifyAdmin(false);
-          // Optionally redirect to signin
-          // router.push("/auth/signin");
+          router.push("/signin");
         }
       } catch (error) {
         console.error("Error verifying admin:", error);
@@ -75,8 +73,11 @@ function DashBoardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-xl">Loading...</div>
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-xl shadow-lg flex items-center gap-3">
+          <div className="w-8 h-8 border-4 border-gray-200 border-t-[#2d8659] rounded-full animate-spin"></div>
+          <p className="font-poppins text-gray-700">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -95,7 +96,7 @@ function DashBoardPage() {
               You are not authorized to access this dashboard.
             </p>
             <button
-              onClick={() => router.push("/auth/signin")}
+              onClick={() => router.push("/signin")}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Go to Sign In

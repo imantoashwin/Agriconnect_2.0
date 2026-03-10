@@ -102,17 +102,17 @@ function Dashboard() {
 
   if (loading) {
     return (
-      <div className="w-full h-full p-5 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00922B] mx-auto mb-4"></div>
-          <p className="font-dmsans text-[#5A5A5A]">Loading dashboard...</p>
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-xl shadow-lg flex items-center gap-3">
+          <div className="w-8 h-8 border-4 border-gray-200 border-t-[#2d8659] rounded-full animate-spin"></div>
+          <p className="font-poppins text-gray-700">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full p-5 flex flex-wrap justify-around">
+    <div className="w-full h-full flex flex-wrap justify-around">
       {/* Stats cards */}
       <div className="w-full flex flex-wrap items-center justify-around">
         <div className="w-[250px] h-[100px] rounded-md border border-[#C9C9C9] shadow-md flex flex-col items-center justify-center mb-10">

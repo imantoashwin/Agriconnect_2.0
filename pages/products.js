@@ -12,13 +12,29 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { db } from "../firebase";   // ✅ reuse single firebase instance
 import { collection, getDocs } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 function Product() {
+  const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const purchase = useSelector((state) => state.purchase);
+  const user = useSelector((state) => state.user);
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = () => {
+      const currentUser = localStorage.getItem("currentUser");
+      if (!currentUser && !user.isLoggedIn) {
+        alert("Please sign in to view products");
+        router.push("/signin");
+        return;
+      }
+    };
+    checkAuth();
+  }, [user.isLoggedIn, router]);
 
   // Initialize Google Translate
   useEffect(() => {

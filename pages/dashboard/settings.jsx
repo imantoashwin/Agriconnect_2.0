@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import DashBoardNavBar from "../../../components/DashBoardNavBar/DashBoardNavBar";
-import DashBoardSidebar from "../../../components/DashBoardSidebar/DashBoardSidebar";
-import ReviewComponent from "../../../components/ReviewsComponent/ReviewComponent";
+import DashBoardNavBar from "../../components/DashBoardNavBar/DashBoardNavBar";
+import DashBoardSidebar from "../../components/DashBoardSidebar/DashBoardSidebar";
+import Settings from "../../components/Settings/Settings";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
-function Reviews() {
+const SettingsPage = () => {
   const router = useRouter();
   const isLoggedIn = useSelector((state) => state.admin)?.isLoggedIn;
   const [loading, setLoading] = useState(true);
@@ -37,15 +37,11 @@ function Reviews() {
   return (
     <div>
       <DashBoardNavBar />
-      <div className="flex">
-        <div className="w-full">
-          <DashBoardSidebar>
-            <ReviewComponent />
-          </DashBoardSidebar>
-        </div>
-      </div>
+      <DashBoardSidebar>
+        <Settings />
+      </DashBoardSidebar>
     </div>
   );
-}
+};
 
-export default Reviews;
+export default SettingsPage;

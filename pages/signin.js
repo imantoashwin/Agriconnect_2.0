@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ConnectTogether from "../components/ConnectTogether/ConnectTogether";
+import Navbar from "../components/Navbar/Navbar";
+import Footer from "../components/Footer/Footer";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { login as loginUser } from "../redux/userSlice";
@@ -376,19 +378,20 @@ function Signin() {
 
   return (
     <>
+      <Navbar />
       <div className="min-h-screen bg-gray-50">
         {/* Google Translate Elements */}
         <div className="translate-micro" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 9999, display: 'none' }}>
           <div id="google_translate_element" className="translate-icon"></div>
           <div className="custom-translate-btn" title="Translate">🌐</div>
         </div>
-
+{/* 
         <div className="mobile-translate-btn" style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 9999 }} title="Translate">
           🌐
-        </div>
+        </div> */}
 
         {/* Logo */}
-        <div className="px-8 py-6">
+        {/* <div className="px-8 py-6">
           <Link href="/" passHref>
             <div className="cursor-pointer">
               <Image
@@ -400,7 +403,7 @@ function Signin() {
               />
             </div>
           </Link>
-        </div>
+        </div> */}
 
         <div className="max-w-6xl mx-auto px-6 py-8">
           {/* <ConnectTogether /> */}
@@ -446,7 +449,7 @@ function Signin() {
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                Admin Login
+                Farmer Login
               </button>
             </div>
           </div>
@@ -454,7 +457,7 @@ function Signin() {
           {/* Login Form */}
           <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center font-poppins">
-              {isAdminMode ? "Admin Login" : "User Login"}
+              {isAdminMode ? "Farmer Login" : "User Login"}
             </h2>
             
             <div className="space-y-4">
@@ -547,7 +550,7 @@ function Signin() {
           {/* Sign Up Link */}
           <div className="max-w-md mx-auto mt-6 text-center">
             <p className="text-gray-600 font-poppins">
-              New here?{" "}
+              Don't have an account?{" "}
               <Link href="/signup">
                 <span className="text-[#2d8659] hover:underline font-medium cursor-pointer">
                   Sign up
@@ -556,6 +559,7 @@ function Signin() {
             </p>
           </div>
         </div>
+        <Footer />
       </div>
 
       <ToastContainer />

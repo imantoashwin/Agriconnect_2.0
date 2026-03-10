@@ -17,13 +17,28 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import Footer from "../components/Footer/Footer";
+import { useRouter } from "next/router";
 
 const OrdersPage = () => {
+  const router = useRouter();
   const user = useSelector((state) => state.user);
   const [orderPurchased, setOrderPurchased] = useState([]);
   const [orderStatus, setOrderStatus] = useState("pending");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = () => {
+      const currentUser = localStorage.getItem("currentUser");
+      if (!currentUser && !user.isLoggedIn) {
+        alert("Please sign in to view your orders");
+        router.push("/signin");
+        return;
+      }
+    };
+    checkAuth();
+  }, [user.isLoggedIn, router]);
 
   // Helper function to safely format dates
   const formatOrderDate = (dateValue) => {
@@ -230,24 +245,24 @@ const OrdersPage = () => {
         </div>
       )}
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-4 sm:py-8 px-3 sm:px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header Section */}
-          <div className="mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">My Orders</h1>
-            <p className="text-gray-600">Track and manage your recent purchases</p>
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">My Orders</h1>
+            <p className="text-sm sm:text-base text-gray-600">Track and manage your recent purchases</p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-6 py-3 sm:py-4 rounded-lg mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3">
               <div>
-                <p className="font-semibold">Error</p>
-                <p className="text-sm mt-1">{error}</p>
+                <p className="font-semibold text-sm sm:text-base">Error</p>
+                <p className="text-xs sm:text-sm mt-1">{error}</p>
               </div>
               <button
                 onClick={() => fetchOrderPurchased(user)}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium whitespace-nowrap"
+                className="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-xs sm:text-sm font-medium whitespace-nowrap"
               >
                 Retry
               </button>
@@ -256,44 +271,44 @@ const OrdersPage = () => {
 
           {/* Empty State */}
           {!loading && !error && orderPurchased.length === 0 && (
-            <div className="bg-white rounded-xl shadow-md p-12 text-center">
+            <div className="bg-white rounded-xl shadow-md p-8 sm:p-12 text-center">
               <div className="mb-4">
-                <svg className="w-16 h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-12 sm:w-16 h-12 sm:h-16 mx-auto text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2z" />
                 </svg>
               </div>
-              <p className="text-gray-900 text-xl font-semibold mb-2">No orders yet</p>
-              <p className="text-gray-500">Your orders will appear here once you make a purchase</p>
+              <p className="text-gray-900 text-lg sm:text-xl font-semibold mb-2">No orders yet</p>
+              <p className="text-sm sm:text-base text-gray-500">Your orders will appear here once you make a purchase</p>
             </div>
           )}
 
           {/* Orders List */}
           {orderPurchased.length > 0 && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {orderPurchased.map((order, index) => (
                 <div
                   key={order.id || index}
-                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200"
+                  className="bg-white rounded-lg sm:rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200"
                 >
                   {/* Order Header */}
-                  <div className="bg-gradient-to-r from-[#2d8659]/5 to-[#2d8659]/10 px-4 sm:px-6 py-4 border-b border-gray-200">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                      <div>
-                        <p className="text-xs text-gray-500 mb-1">Order Date</p>
-                        <p className="text-base sm:text-lg font-semibold text-gray-900">
+                  <div className="bg-gradient-to-r from-[#2d8659]/5 to-[#2d8659]/10 px-3 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
+                      <div className="flex-1">
+                        <p className="text-xs text-gray-500 mb-0.5 sm:mb-1">Order Date</p>
+                        <p className="text-sm sm:text-lg font-semibold text-gray-900">
                           {order.formattedDate || formatOrderDate(order.purchasedAt)}
                         </p>
                       </div>
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4 sm:ml-auto">
                         <div className="text-left sm:text-right">
-                          <p className="text-xs text-gray-500 mb-1">Order Total</p>
-                          <p className="text-xl sm:text-2xl font-bold text-[#2d8659]">
+                          <p className="text-xs text-gray-500 mb-0.5 sm:mb-1">Order Total</p>
+                          <p className="text-lg sm:text-2xl font-bold text-[#2d8659]">
                             ₹{order.totalAmount?.toFixed(2) || 0}
                           </p>
                         </div>
                         {order.paymentStatus && (
                           <span
-                            className={`inline-block px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap ${
+                            className={`inline-block px-2 sm:px-4 py-1 sm:py-2 rounded-full text-xs font-semibold whitespace-nowrap self-start sm:self-auto ${
                               order.paymentStatus === "completed"
                                 ? "bg-green-100 text-green-800"
                                 : order.paymentStatus === "pending"
@@ -311,9 +326,9 @@ const OrdersPage = () => {
                   </div>
 
                   {/* Order Items */}
-                  <div className="p-4 sm:p-6">
+                  <div className="p-3 sm:p-6">
                     {order.productsBrought?.length > 0 ? (
-                      <div className="space-y-4">
+                      <div className="space-y-3 sm:space-y-4">
                         {order.productsBrought.map((product, productIndex) => (
                           <div key={product.id || productIndex}>
                             <OrderComponent
@@ -327,7 +342,7 @@ const OrdersPage = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-gray-500 text-center py-8">No products in this order</p>
+                      <p className="text-gray-500 text-center text-sm sm:text-base py-6 sm:py-8">No products in this order</p>
                     )}
                   </div>
                 </div>

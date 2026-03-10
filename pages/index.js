@@ -1,24 +1,21 @@
-import { useContext, useState } from "react";
-import ConnectTogether from "../components/ConnectTogether/ConnectTogether";
-import FarmingContent from "../components/FarmingContent/FarmingContent";
-import FarmToHome from "../components/FarmToHome/FarmToHome";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Navbar/Navbar";
-import NewsFeed from "../components/NewsFeed/NewsFeed";
-import OrdersLocation from "../components/OrdersLocation/OrdersLocation";
-import { getCookie, hasCookie, setCookie } from "cookies-next";
-import AdminPanel from "../components/AdminPanel/adminPanel";
+import HomeComponent1 from "../components/HomeComponent/HomeComponent1";
+import HomeComponent2 from "../components/HomeComponent/HomeComponent2";
+import HomeComponent3 from "../components/HomeComponent/HomeComponent3";
+import HomeComponent4 from "../components/HomeComponent/HomeComponent4";
+import HomeComponent5 from "../components/HomeComponent/HomeComponent5";
+
 export default function Home() {
   return (
     <div className="">
       <Navbar />
-      <ConnectTogether />
-      <FarmingContent />
-      <FarmToHome />
-      <OrdersLocation />
-      <NewsFeed />
+      <HomeComponent1 />
+      <HomeComponent2 />
+      <HomeComponent3 />
+      <HomeComponent4 />
+      <HomeComponent5 />
       <Footer />
     </div>
-    // <AdminPanel/>
   );
 }
